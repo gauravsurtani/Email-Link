@@ -123,6 +123,3 @@ This project is available under the MIT License.
 
 ## Contributing
 Contributions are welcome! Please feel free to submit a Pull Request.
-
----
-Answer from Perplexity: pplx.ai/share
