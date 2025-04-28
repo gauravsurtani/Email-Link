@@ -453,51 +453,6 @@ class GraphEmbeddings:
             
         return similar_entities
         
-    def predict_missing_links(self, head_id, relation_type, top_k=10):
-        """
-        Predict missing links in the knowledge graph.
-        
-        Args:
-            head_id: ID of the head entity
-            relation_type: Type of relation
-            top_k: Number of top predictions to return
-            
-        Returns:
-            List of predicted tail entities with scores
-        """
-        if self.model is None:
-            logger.error("No model loaded. Train a model or load embeddings first.")
-            return []
-            
-        if head_id not in self.entity_to_idx or relation_type not in self.relation_to_idx:
-            logger.error(f"Head entity or relation not found in the knowledge graph")
-            return []
-            
-        # Get indices
-        head_idx = self.entity_to_idx[head_id]
-        relation_idx = self.relation_to_idx[relation_type]
-        
-        # Get embeddings
-        head_embedding = self.model.entity_embeddings.weight[head_idx].detach()
-        relation_embedding = self.model.relation_embeddings.weight[relation_idx].detach()
-        
-        # Calculate scores for all potential tail entities
-        all_tail_embeddings = self.model.entity_embeddings.weight.detach()
-        scores = torch.norm(head_embedding + relation_embedding - all_tail_embeddings, p=1, dim=1)
-        scores = scores.cpu().numpy()
-        
-        # Get top-k predictions (lowest scores)
-        top_idxs = np.argsort(scores)[:top_k]
-        predictions = []
-        
-        for idx in top_idxs:
-            predictions.append({
-                'entity': self.idx_to_entity[idx],
-                'score': float(scores[idx])
-            })
-            
-        return predictions
-        
     def find_events_for_person(self, person_email, top_k=10):
         """
         Find most relevant events for a person using embeddings.
