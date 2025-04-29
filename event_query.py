@@ -25,6 +25,11 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
+# Global variable to store event IDs mapping between display numbers and internal IDs
+_event_id_cache = {}
+# Global variable to store the last selected event ID
+_selected_event_id = None
+
 class EventQuery:
     """Class for querying events from the Neo4j graph database."""
     
@@ -253,6 +258,37 @@ class EventQuery:
             result = session.run(query, location=location, limit=limit)
             return [dict(record) for record in result]
             
+    def get_event_by_subject(self, subject, limit=5):
+        """
+        Get events by subject text.
+        
+        Args:
+            subject: Text to match in event subject
+            limit: Maximum number of results
+            
+        Returns:
+            List of event dictionaries
+        """
+        query = """
+        MATCH (e:Event)
+        WHERE e.subject CONTAINS $subject
+        OPTIONAL MATCH (e)-[:LOCATED_AT]->(l:Location)
+        OPTIONAL MATCH (p:Person)-[:ORGANIZES]->(e)
+        RETURN e.event_id as id,
+               e.subject as subject,
+               e.event_type as type,
+               e.event_date as date,
+               e.event_time as time,
+               l.name as location,
+               p.email as organizer
+        ORDER BY e.event_date DESC, e.event_time DESC
+        LIMIT $limit
+        """
+        
+        with self.driver.session() as session:
+            result = session.run(query, subject=subject, limit=limit)
+            return [dict(record) for record in result]
+            
     def get_event_statistics(self):
         """
         Get statistics about events in the database.
@@ -314,13 +350,20 @@ def format_event_list(events):
         
     # Create table data
     table_data = []
-    for event in events:
+    # Store the full event IDs for later reference
+    global _event_id_cache
+    _event_id_cache = {}
+    
+    for idx, event in enumerate(events, 1):
+        # Store the event ID in the cache with its index
+        _event_id_cache[idx] = event.get('id', 'N/A')
+        
         date_str = event.get('date', 'N/A')
         time_str = event.get('time', '')
         datetime_str = f"{date_str} {time_str}".strip()
         
         row = [
-            event.get('id', 'N/A')[:8] + '...',  # Truncate ID
+            idx,  # Use index number instead of ID
             event.get('subject', 'N/A'),
             event.get('type', 'N/A'),
             datetime_str,
@@ -334,11 +377,14 @@ def format_event_list(events):
         table_data.append(row)
     
     # Create headers
-    headers = ["ID", "Subject", "Type", "Date/Time", "Location"]
+    headers = ["#", "Subject", "Type", "Date/Time", "Location"]
     if 'role' in events[0]:
         headers.append("Role")
+    
+    result = tabulate(table_data, headers=headers, tablefmt="grid")
+    result += "\n\nTip: Use event number from the '#' column with the 'select' command instead of copying event IDs."
         
-    return tabulate(table_data, headers=headers, tablefmt="grid")
+    return result
 
 def format_event_details(event):
     """Format detailed event information for display."""
@@ -447,6 +493,15 @@ def parse_args():
     details_parser = subparsers.add_parser('details', help='Show details for a specific event')
     details_parser.add_argument('event_id', help='Event ID to get details for')
     
+    # Select command (new)
+    select_parser = subparsers.add_parser('select', help='Select an event by number from the last displayed list')
+    select_parser.add_argument('event_number', type=int, help='Event number from the list to select')
+    
+    # Subject command (new)
+    subject_parser = subparsers.add_parser('subject', help='Find events by subject text')
+    subject_parser.add_argument('text', help='Subject text to search for')
+    subject_parser.add_argument('--limit', type=int, default=5, help='Maximum number of results')
+    
     # Search command
     search_parser = subparsers.add_parser('search', help='Search for events')
     search_parser.add_argument('query', help='Text to search for')
@@ -481,6 +536,9 @@ def parse_args():
     recommend_parser.add_argument('email', help='Email address of the person')
     recommend_parser.add_argument('--limit', type=int, default=5, help='Number of recommendations')
     
+    # Show selected event command (new)
+    show_selected_parser = subparsers.add_parser('show-selected', help='Show details of the currently selected event')
+    
     return parser.parse_args()
 
 def main():
@@ -512,6 +570,9 @@ def main():
     # Initialize event query
     event_query = EventQuery(neo4j_uri, neo4j_user, neo4j_password)
     
+    # Access global variables
+    global _event_id_cache, _selected_event_id
+    
     try:
         # Process command
         if args.command == 'recent':
@@ -523,6 +584,36 @@ def main():
             event = event_query.get_event_by_id(args.event_id)
             print("\nEvent Details:")
             print(format_event_details(event))
+            
+        elif args.command == 'select':
+            # Select an event by its number in the displayed list
+            if args.event_number not in _event_id_cache:
+                print(f"Error: Event number {args.event_number} is not in the current list.")
+                print("Run a query first to get a list of events, then use the number from the '#' column.")
+                return 1
+                
+            _selected_event_id = _event_id_cache[args.event_number]
+            event = event_query.get_event_by_id(_selected_event_id)
+            
+            print(f"\nSelected Event #{args.event_number}:")
+            print(format_event_details(event))
+            print("\nTip: Use 'show-selected' command to view this event again later.")
+            
+        elif args.command == 'show-selected':
+            # Show the currently selected event
+            if not _selected_event_id:
+                print("No event currently selected. Use the 'select' command first.")
+                return 1
+                
+            event = event_query.get_event_by_id(_selected_event_id)
+            print("\nCurrently Selected Event:")
+            print(format_event_details(event))
+            
+        elif args.command == 'subject':
+            # Find events by subject text
+            events = event_query.get_event_by_subject(args.text, args.limit)
+            print(f"\nEvents with subject containing '{args.text}' ({len(events)} found):")
+            print(format_event_list(events))
             
         elif args.command == 'search':
             events = event_query.search_events(args.query, args.limit)
@@ -555,6 +646,11 @@ def main():
                 print("Error: No embeddings found. Run event_pipeline.py first to generate embeddings.")
                 return 1
                 
+            # If the argument is a number and we have an event cache, use the cached ID
+            event_id = args.event_id
+            if event_id.isdigit() and int(event_id) in _event_id_cache:
+                event_id = _event_id_cache[int(event_id)]
+                
             # Load embeddings
             embeddings = GraphEmbeddings(neo4j_uri, neo4j_user, neo4j_password, output_dir=embeddings_dir)
             if not embeddings.load_embeddings():
@@ -562,13 +658,13 @@ def main():
                 return 1
                 
             # Get event details to confirm it exists
-            event = event_query.get_event_by_id(args.event_id)
+            event = event_query.get_event_by_id(event_id)
             if not event:
-                print(f"Error: Event with ID {args.event_id} not found.")
+                print(f"Error: Event with ID {event_id} not found.")
                 return 1
                 
             # Find similar entities
-            entity_id = f"Event_{args.event_id}"
+            entity_id = f"Event_{event_id}"
             similar_entities = embeddings.query_similar_entities(entity_id, args.limit)
             
             # Filter for events only
@@ -583,15 +679,21 @@ def main():
             
             print(f"\nEvents Similar to '{event['subject']}' ({len(similar_events)} found):")
             
+            # Update the event cache
+            _event_id_cache = {}
+            
             # Create table data
             table_data = []
-            for event in similar_events:
+            for idx, event in enumerate(similar_events, 1):
+                # Store the event ID in the cache with its index
+                _event_id_cache[idx] = event.get('id', 'N/A')
+                
                 date_str = event.get('date', 'N/A')
                 time_str = event.get('time', '')
                 datetime_str = f"{date_str} {time_str}".strip()
                 
                 row = [
-                    event.get('id', 'N/A')[:8] + '...',  # Truncate ID
+                    idx,  # Use index number instead of ID
                     event.get('subject', 'N/A'),
                     event.get('type', 'N/A'),
                     datetime_str,
@@ -602,9 +704,11 @@ def main():
                 table_data.append(row)
             
             # Create headers
-            headers = ["ID", "Subject", "Type", "Date/Time", "Location", "Similarity"]
+            headers = ["#", "Subject", "Type", "Date/Time", "Location", "Similarity"]
             
-            print(tabulate(table_data, headers=headers, tablefmt="grid"))
+            result = tabulate(table_data, headers=headers, tablefmt="grid")
+            result += "\n\nTip: Use event number from the '#' column with the 'select' command instead of copying event IDs."
+            print(result)
             
         elif args.command == 'recommend':
             # Check if embeddings exist
@@ -624,15 +728,21 @@ def main():
             
             print(f"\nRecommended Events for {args.email} ({len(events)} found):")
             
+            # Update the event cache
+            _event_id_cache = {}
+            
             # Create table data
             table_data = []
-            for event in events:
+            for idx, event in enumerate(events, 1):
+                # Store the event ID in the cache with its index
+                _event_id_cache[idx] = event.get('id', 'N/A')
+                
                 date_str = event.get('date', 'N/A')
                 time_str = event.get('time', '')
                 datetime_str = f"{date_str} {time_str}".strip()
                 
                 row = [
-                    event.get('id', 'N/A')[:8] + '...',  # Truncate ID
+                    idx,  # Use index number instead of ID
                     event.get('subject', 'N/A'),
                     event.get('type', 'N/A'),
                     datetime_str,
@@ -643,9 +753,11 @@ def main():
                 table_data.append(row)
             
             # Create headers
-            headers = ["ID", "Subject", "Type", "Date/Time", "Location", "Relevance"]
+            headers = ["#", "Subject", "Type", "Date/Time", "Location", "Relevance"]
             
-            print(tabulate(table_data, headers=headers, tablefmt="grid"))
+            result = tabulate(table_data, headers=headers, tablefmt="grid")
+            result += "\n\nTip: Use event number from the '#' column with the 'select' command instead of copying event IDs."
+            print(result)
             
         # Close Neo4j connection
         event_query.close()

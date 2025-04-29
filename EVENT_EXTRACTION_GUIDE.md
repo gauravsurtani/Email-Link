@@ -143,3 +143,60 @@ python setup.py
 - The embedding generation requires significant memory for large datasets
 - For large email collections, reduce batch size in `graph_embeddings.py`
 - If GPU is available, it will be used automatically for faster training 
+
+## Working with Events
+
+### New User-Friendly Event Selection
+
+The system has been enhanced with features to make working with events easier:
+
+1. **Using Event Numbers Instead of IDs**
+   
+   Events are now displayed with a simple number (#) column that you can use instead of copying long event IDs:
+   
+   ```
+   # Recent Events (3 found):
+   +----+--------------------+----------+-------------------+-------------+
+   |  # | Subject            | Type     | Date/Time         | Location    |
+   +====+====================+==========+===================+=============+
+   |  1 | Team Meeting       | meeting  | 2023-05-15 10:00  | Room 101    |
+   +----+--------------------+----------+-------------------+-------------+
+   |  2 | Project Update     | update   | 2023-05-10 14:30  | Zoom        |
+   +----+--------------------+----------+-------------------+-------------+
+   |  3 | Coffee Chat        | meeting  | 2023-05-08 09:00  | Cafeteria   |
+   +----+--------------------+----------+-------------------+-------------+
+   
+   Tip: Use event number from the '#' column with the 'select' command instead of copying event IDs.
+   ```
+
+2. **Selecting Events by Number**
+   
+   Instead of copying the event ID, you can now use:
+   
+   ```
+   python event_query.py select 1
+   ```
+   
+   This will select the first event from the most recently displayed list and show its details.
+
+3. **Finding Events by Subject**
+   
+   If you remember part of the event name/subject but not the ID:
+   
+   ```
+   python event_query.py subject "Meeting"
+   ```
+   
+   This will find all events with "Meeting" in the subject line.
+
+4. **Working with a Selected Event**
+   
+   Once you've selected an event, you can recall it at any time:
+   
+   ```
+   python event_query.py show-selected
+   ```
+   
+   This will show the details of the currently selected event again.
+
+These improvements make it much easier to work with events without needing to know or copy complex event IDs. 
