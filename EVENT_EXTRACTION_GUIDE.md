@@ -199,4 +199,113 @@ The system has been enhanced with features to make working with events easier:
    
    This will show the details of the currently selected event again.
 
-These improvements make it much easier to work with events without needing to know or copy complex event IDs. 
+These improvements make it much easier to work with events without needing to know or copy complex event IDs.
+
+## Technical Deep Dive: Knowledge Graph Embeddings for Event Analysis
+
+### Understanding Knowledge Graph Embeddings
+
+The email event extraction system employs state-of-the-art knowledge graph embedding techniques to provide intelligent event recommendations and find semantically similar events. Here's how it works:
+
+#### The Knowledge Graph Foundation
+
+The system begins by constructing a rich knowledge graph in Neo4j with:
+
+1. **Core Entities**:
+   - **Emails**: Messages in your inbox
+   - **Persons**: Email senders and recipients
+   - **Events**: Extracted events (meetings, interviews, etc.)
+   - **Locations**: Places where events occur
+
+2. **Relationships**:
+   - Person SENT Email
+   - Person RECEIVED Email
+   - Person ATTENDS Event
+   - Person ORGANIZES Event
+   - Email CONTAINS_EVENT Event
+   - Event LOCATED_AT Location
+
+This graph representation captures the complex network of interactions between people and events in your email data.
+
+#### TransE: Translating Embeddings
+
+The system uses the **TransE** (Translating Embeddings) algorithm to learn vector representations of all entities and relationships in the knowledge graph:
+
+1. **Mathematical Foundation**:
+   - Each entity (person, email, event) is represented as a vector in a high-dimensional space (typically 100 dimensions)
+   - Each relationship type is also represented as a vector in the same space
+   - TransE models relationships as translations in this vector space
+
+2. **The Key Insight**:
+   If a triple (head, relation, tail) exists in the graph (e.g., "Person_john ATTENDS Event_meeting"), then:
+   ```
+   vector(head) + vector(relation) ≈ vector(tail)
+   ```
+   Or more concretely:
+   ```
+   vector(Person_john) + vector(ATTENDS) ≈ vector(Event_meeting)
+   ```
+
+3. **Learning Process**:
+   - The system extracts all triples from the Neo4j database
+   - It trains the TransE model iteratively, optimizing these vector representations
+   - Training minimizes the distance between `h + r` and `t` for valid triples
+   - The process uses negative sampling (corrupted triples) to ensure discrimination
+   - PyTorch is used to implement and train the model efficiently
+
+#### From Graph to Embeddings to Embeddings File
+
+The embedding generation process occurs during the `event_pipeline.py` execution:
+
+1. The `GraphEmbeddings` class extracts triples from Neo4j
+2. It prepares a PyTorch dataset with these triples
+3. The TransE model is trained using gradient descent
+4. Learned embeddings are saved to CSV files:
+   - `entity_embeddings.csv`: Contains vectors for all entities
+   - `relation_embeddings.csv`: Contains vectors for all relationships
+
+### How Similarity Search Works
+
+When you run `python event_query.py similar EVENT_ID`, the system:
+
+1. **Loads the pre-trained embeddings** from the CSV files
+2. **Retrieves the embedding vector** for the specified event
+3. **Calculates cosine similarity** between the target event vector and all other event vectors:
+   ```python
+   similarities = np.dot(all_embeddings, entity_embedding) / (
+       np.linalg.norm(all_embeddings, axis=1) * np.linalg.norm(entity_embedding)
+   )
+   ```
+4. **Ranks events by similarity** and returns the top-k most similar events
+5. For each similar event, it retrieves the full details from Neo4j
+
+The power of this approach is that it finds events that are semantically similar, not just textually similar. Two events might be related even if they have different descriptions, because the embedding captures their context in the graph (who attends them, where they take place, what kind of emails mention them).
+
+### How Event Recommendations Work
+
+When you run `python event_query.py recommend EMAIL`, the system:
+
+1. **Identifies the person's embedding vector** using their email address
+2. **Gathers embeddings for all events** in the knowledge graph
+3. **Computes similarity scores** between the person's vector and each event vector
+4. **Ranks events** by their relevance to the person
+5. **Returns detailed information** about the most relevant events
+
+This process can discover events that might be relevant to you even if you've never directly interacted with them. The system might recommend an event because:
+- People similar to you have attended similar events
+- The event is related to topics you've shown interest in
+- The event has semantic connections to your communication patterns
+
+### Technical Advantages of the Embedding Approach
+
+1. **Captures Latent Semantics**: The embeddings capture hidden patterns in your email data that wouldn't be visible from simple querying.
+
+2. **Handles Sparsity**: Even with limited data, the embedding space can generalize relationships and make meaningful recommendations.
+
+3. **Scales Efficiently**: Once embeddings are generated, similarity calculations are extremely fast, even with thousands of events.
+
+4. **Continuous Improvement**: As more email data is processed, the embeddings become more refined and accurate.
+
+5. **Cold Start Handling**: New events and persons can be mapped into the existing embedding space using their known relationships.
+
+The embedding-based approach allows the system to go beyond simple text matching, enabling it to discover semantic connections and make intelligent recommendations that might not be obvious from looking at the raw data. 

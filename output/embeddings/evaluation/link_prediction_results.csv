@@ -1,0 +1,2 @@
+mean_rank,mean_reciprocal_rank,hits@10,valid_triples
+24.05,0.5639851989762937,0.65,100
