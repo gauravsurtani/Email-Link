@@ -11,12 +11,14 @@ This project transforms your Gmail data into a powerful graph database, enabling
 - 🤖 Includes an AI agent interface for natural language exploration of the email graph
 - 📅 Extracts events and appointments from emails for calendar analysis
 - 🧠 Generates knowledge graph embeddings for event similarity and recommendations
+- 🧠 Extracts semantic data (entities, actions, types) from emails using LLMs
 
 ## Requirements
 - Python 3.8+
 - Neo4j 4.4+ (Desktop or Server)
 - Gmail Takeout MBOX file
 - Additional packages listed in requirements.txt
+- OpenAI API key (for semantic extraction)
 
 ## Project Structure
 ```
@@ -27,14 +29,16 @@ EmailLink/
 │   ├── __init__.py
 │   ├── mbox_parser.py      # MBOX file parsing
 │   └── email_extractor.py  # Email data extraction
+├── analysis/               # Email analysis module
+│   ├── __init__.py
+│   ├── queries.py          # Common graph queries
+│   ├── metrics.py          # Compute email metrics
+│   ├── semantic_extractor.py # Extract entities and actions
+│   └── semantic_analysis.py  # Analyze extracted semantic data
 ├── graph_db/               # Graph database module
 │   ├── __init__.py
 │   ├── schema.py           # Database schema
 │   └── loader.py           # Data loading into Neo4j
-├── analysis/               # Email analysis module
-│   ├── __init__.py
-│   ├── queries.py          # Common graph queries
-│   └── metrics.py          # Compute email metrics
 ├── agent/                  # AI agent module
 │   ├── __init__.py
 │   ├── agent.py            # Main agent implementation
@@ -47,6 +51,8 @@ EmailLink/
 │   └── graph_embeddings.py # Graph embedding generation
 ├── event_pipeline.py       # Event extraction pipeline
 ├── event_query.py          # Event querying tools
+├── extract_semantic_data.py # Script to extract semantic data
+├── analyze_semantic_data.py # Script to analyze semantic data
 └── main.py                 # Main execution script
 ```
 
@@ -64,11 +70,12 @@ pip install -r requirements.txt
 ```
 
 ### 3. Configure Environment
-Create a `.env` file in the project root with your Neo4j credentials:
+Copy the `env.example` file to `.env` in the project root and update it with your Neo4j credentials and OpenAI API key:
 ```
 NEO4J_URI=bolt://localhost:7687
 NEO4J_USER=neo4j
 NEO4J_PASSWORD=your_password
+OPENAI_API_KEY=your_openai_api_key
 OUTPUT_DIR=./output
 ```
 
@@ -89,10 +96,23 @@ python main.py --mbox path/to/your/takeout-file.mbox
 python event_pipeline.py --safe-mode
 ```
 
-### 4. Explore Your Email Graph and Events
+### 4. Extract Semantic Data (Optional)
+This step uses LLMs to extract entities, actions, and classify emails:
+```bash
+python extract_semantic_data.py --input output/parsed_emails.json --output output/semantic_data
+```
+
+### 5. Analyze Semantic Data (Optional)
+Analyze the extracted semantic data to get insights:
+```bash
+python analyze_semantic_data.py --data output/semantic_data --output output/analysis --visualize
+```
+
+### 6. Explore Your Email Graph and Events
 The system will:
 - Parse your MBOX file
 - Extract communication metadata and events
+- Extract semantic data (if requested)
 - Build a graph database
 - Generate knowledge graph embeddings
 - Enable complex queries for analysis
@@ -230,11 +250,11 @@ WHERE p1 <> p2
 RETURN path
 LIMIT 100
 
-// Find emails containing events
-MATCH (e:Email)-[:CONTAINS_EVENT]->(event:Event)
-RETURN e.subject, event.subject, event.event_type, event.event_date
-ORDER BY event.event_date DESC
-LIMIT 20
+// Find all job application emails (with semantic data)
+MATCH (e:Email)-[:HAS_SEMANTIC_DATA]->(s:SemanticData)
+WHERE s.type = 'job application'
+RETURN e.subject, e.date
+ORDER BY e.date DESC
 ```
 
 ## Troubleshooting
@@ -243,6 +263,7 @@ LIMIT 20
 - **Memory Issues**: For large MBOX files, increase Java heap size in Neo4j config
 - **Import Errors**: Ensure your MBOX file is in standard format from Gmail Takeout
 - **Connection Issues**: Verify Neo4j is running and credentials are correct
+- **OpenAI API**: Ensure your API key is valid and has sufficient quota
 
 ### Event Extraction Issues
 - **Unicode Encoding Issues (Windows)**: If you encounter encoding errors with emojis, use:

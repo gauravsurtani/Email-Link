@@ -1,6 +1,11 @@
+# Input data files
 input/All mail Including Spam and Trash.mbox
+input/*.mbox
+
+# Output files
 output/parsed_emails.json
 output/embeddings/
+output/*.json
 *.mbox
 
 # Python
@@ -10,17 +15,33 @@ __pycache__/
 */__pycache__/
 */*/__pycache__/
 */*/*/__pycache__/
+*.so
+.Python
+*.egg-info/
 
 # Distribution / packaging
 dist/
 build/
+develop-eggs/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
 *.egg-info/
+.installed.cfg
+*.egg
 
 # Virtual environments
 email_env/
 venv/
 env/
 ENV/
+.env-*
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -30,10 +51,14 @@ ENV/
 .vscode/
 *.swp
 *.swo
+.cursor/
 
 # OS specific files
 .DS_Store
 Thumbs.db
+desktop.ini
+*.bak
+*~
 
 # Temporary files
 temp/
@@ -42,3 +67,17 @@ temp/
 # Local configuration
 .env
 .env.local
+
+# Logs
+*.log
+
+# Documentation artifacts
+*.docx
+*.pdf
+*.pptx
+progress_report.*
+Screenshot*
+
+# Model data (may be large)
+model/checkpoints/
+model/weights/
