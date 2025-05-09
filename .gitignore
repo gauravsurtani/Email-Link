@@ -1,11 +1,44 @@
 input/All mail Including Spam and Trash.mbox
 output/parsed_emails.json
+output/embeddings/
+*.mbox
 
-*.pyc
-*.pyo
-*.pyd
-*.pyw
-*.pyz
-*.pywz
-__pycache__/*
-email_parser/__pycache__/*
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*/__pycache__/
+*/*/__pycache__/
+*/*/*/__pycache__/
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+email_env/
+venv/
+env/
+ENV/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+temp/
+*.tmp
+
+# Local configuration
+.env
+.env.local

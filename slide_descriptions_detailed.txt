@@ -1,0 +1,255 @@
+SLIDE 1: Title Slide
+TEXTUAL ELEMENTS
+• Main title (two lines): “Leveraging Knowledge Graphs and Trans‑E Embeddings” on line 1, “for Event Extraction from Email Data” on line 2. Typeface is extra‑bold, geometric sans‑serif, charcoal‑grey (#333). Font size ≈ 64 pt.
+• Subtitle (single sentence, 18 pt, medium‑grey): “Transforming unstructured email into actionable insight”.
+• Author line at bottom center: “By Gaurav Surtani & Somesh Bagadiya” in small caps, 14 pt.
+
+GRAPHIC / VISUAL ELEMENTS
+• Pure white background with vast whitespace; no borders.
+• A slim, horizontal light‑teal rule (2 px) separates subtitle and author line, spanning 30% of slide width.
+• Lower‑right corner bears a tiny pale‑grey “Made with Gamma” logo.
+• Overall feeling: minimalist, high contrast, clean corporate aesthetic.
+
+--------------------------------------------------------------------------------
+
+SLIDE 2: Why Email Data?
+TEXTUAL ELEMENTS
+• Opening italic block‑quote centered at the top (20 pt, dark‑grey):  
+  “Why should it be so hard to find something on email? …”
+
+• Four justification blocks, each comprising:
+  – A bold heading (18 pt) and brief explanation (14 pt regular).
+
+GRAPHIC / VISUAL ELEMENTS
+• Layout: quote occupies top 25 % of slide; below, a two‑column grid (2 × 2).
+• Each grid cell contains:
+  ▸ Left edge: circular icon (48 px) filled with soft‑teal; white line‑art symbol inside.  
+      • Vast Unstructured Information → stacked letter pages icon.  
+      • Hard to Analyse Systematically → tangled magnifying glass icon.  
+      • Knowledge Graph Solution → connected nodes icon forming a triangle.  
+      • Tracking Event Gaps → open label‑tag icon with alert dot.
+  ▸ Right of icon: heading and explanation text with left alignment.
+
+• Background remains white; subtle drop‑shadow on icons creates depth.
+
+--------------------------------------------------------------------------------
+
+SLIDE 3: System Architecture
+TEXTUAL ELEMENTS
+• Header “System Architecture” left‑aligned in 28 pt bold.
+
+GRAPHIC / VISUAL ELEMENTS
+• Central horizontal pipeline occupying 80 % width:
+  1. Data Ingestion – jade‑green rounded rectangle containing a white inbox‑tray icon and label.  
+  2. Parsing & Serialization – lavender rectangle with curly‑braces icon.  
+  3. Graph DB Loading – amber rectangle with Neo4j logo (three connected circles).  
+  4. Embedding Generation – cornflower‑blue rectangle with 3D cube‑array icon.  
+  5. Agent Interaction – pink rectangle with chat‑bubble & sparkles icon.
+• All rectangles have identical height (~1/5 slide) and large white arrow connectors between them. Arrows have gradient strokes that match preceding rectangle colour fading toward next.
+• Thin baseline under pipeline represents data flow timeline.
+
+--------------------------------------------------------------------------------
+
+SLIDE 4: What Are We Extracting?
+TEXTUAL ELEMENTS
+• Top caption: “Targeted Event Types” (22 pt).
+
+GRAPHIC / VISUAL ELEMENTS
+• Four cards laid horizontally (each 22 % width, 90 % height of lower half):
+  1. Meetings – powder‑blue card with calendar‑day icon (white). Lists bullet examples: invitations, rescheduling, accept/decline.  
+  2. Tasks & Deadlines – mint‑green card, checklist icon. Examples: to‑dos, reminders, deliverables.  
+  3. Projects – sunflower‑yellow card, folder‑network icon. Examples: project kickoff, status updates.  
+  4. Travel & Social Events – peach‑orange card, airplane‑take‑off icon. Examples: flight itineraries, lunch meets, team outings.
+• Cards have subtle inner shadow and 8 px rounded corners; text in charcoal; bullets indicated by small right‑chevron glyphs.
+
+--------------------------------------------------------------------------------
+
+SLIDE 5: Database Schema
+TEXTUAL ELEMENTS
+• Two‑column table with header row shaded cool‑grey:
+  Focus Area | Why it’s on the diagram
+• Six numbered rows (Email hub, Person–Email edges, Thread/Reply loop, Context nodes, Event→Location path, Extensibility). Each ‘Why’ cell contains 1‑sentence justification.
+
+GRAPHIC / VISUAL ELEMENTS
+• Behind table (10 % opacity) a watermark ER diagram: light lines show Email node at centre with spokes to Person, Thread, Attachment, Location.
+• Table borders 1 px medium‑grey; alternate rows light‑blue striping for readability.
+
+--------------------------------------------------------------------------------
+
+SLIDE 6: Knowledge Graph Components
+TEXTUAL ELEMENTS
+• Minimal, only the slide title.
+
+GRAPHIC / VISUAL ELEMENTS
+• Full‑bleed screenshot from Neo4j Bloom:
+  – Background dark‑navy canvas.  
+  – Node palette colours: Persons (turquoise circles with user silhouette), Emails (purple squares with envelope), Threads (orange hexagons), Attachments (grey diamonds), Locations (green triangles), Event (pink stars).
+  – Edges thin white lines; arrow‑heads indicate direction.  
+  – Dense clusters around central email threads; legend in upper‑right corner with colour swatches and labels.
+
+--------------------------------------------------------------------------------
+
+SLIDE 7: TransE: Translating Embeddings from Knowledge Graphs
+TEXTUAL ELEMENTS
+• Left panel: heading “Core Concept” and the formula **h + r ≈ t** in 60 pt monospace.
+• Bullet list summarising translation‑based idea.
+
+GRAPHIC / VISUAL ELEMENTS
+• Right panel: simple 2‑D vector illustration – three coloured arrows:
+   – h (blue) starts at origin to midpoint.  
+   – r (orange) continues same direction.  
+   – Sum (green) lands near t (green dot).  
+   • A dotted circle radius shows ‘distance’ metric.
+
+• Entire panel boxed with faint dove‑grey border against white background.
+
+--------------------------------------------------------------------------------
+
+SLIDE 8: How Exactly Does TransE Work for Us?
+TEXTUAL ELEMENTS
+• Four‑step columnar table: Setup, Training, Loss Minimisation, Normalisation; each heading pale‑blue background. Detailed numbered sub‑steps in 12 pt.
+
+GRAPHIC / VISUAL ELEMENTS
+• Thin horizontal arrows under table turn the grid into a swim‑lane, emphasising flow left‑to‑right.
+• In background corner, a faded silhouette of a neural‑network node graph gives subtle texture.
+
+--------------------------------------------------------------------------------
+
+SLIDE 9: Academic Reference
+TEXTUAL ELEMENTS
+• Full citation (APA) of Bordes et al., 2013.
+• Two underlined hyperlinks: “NIPS 2013 PDF”, “View source on Gamma”.
+
+GRAPHIC / VISUAL ELEMENTS
+• A small open‑book icon next to the heading.
+• Otherwise white‑space heavy.
+
+--------------------------------------------------------------------------------
+
+SLIDE 10: Use‑Cases of Adding TransE to Email KG
+TEXTUAL ELEMENTS
+• Four use‑case headings with bold 18 pt and grey 14 pt explanation bullets.
+
+GRAPHIC / VISUAL ELEMENTS
+• Grid of four pastel tiles (lavender, teal, lemon, coral) each containing:
+   – Left‑top: outlined icon 40 px (magnifier, chain link, group, tag stack).  
+   – Rest: text left‑aligned.  
+• Tiles drop‑shadow; slight hover‑pop animation cue (captured midframe).
+
+--------------------------------------------------------------------------------
+
+SLIDE 11: Examples – Events
+TEXTUAL ELEMENTS
+• Caption boxes annotate samples: “Team Meeting”, “Flight Update”.
+
+GRAPHIC / VISUAL ELEMENTS
+• Two side‑by‑side screenshots from Neo4j Browser:
+  – Screenshot A: star‑shaped subgraph with event node at center, person nodes around. Colours identical to palette from slide 6; arrow labels ‘ATTENDS’, ‘ORGANISES’.  
+  – Screenshot B: linear chain showing Email → Flight Event → Location node. Edge captions ‘MENTIONS’, ‘DEPARTS_FROM’.
+• Call‑out arrows (graphical) point to particular edges while annotation text floats above.
+
+--------------------------------------------------------------------------------
+
+SLIDE 12: Examples – Interview Event
+TEXTUAL ELEMENTS
+• Two call‑out labels: “Missing interviewer filled via link‑prediction” and “Venue inferred from thread”.
+
+GRAPHIC / VISUAL ELEMENTS
+• Zoomed screenshot of KG region:
+  – Candidate (turquoise) node connects via ‘APPLICANT’ to Interview‑Event (pink star).  
+  – Recruiter (turquoise) via ‘SCHEDULED’.  
+  – Dashed green arrow shows predicted link to interviewer (new node highlighted with glow).  
+  – Venue node (green triangle) linked with ‘AT’.
+• Canvas dark; neon‑green outline highlights predicted edges vs. solid white for existing.
+
+--------------------------------------------------------------------------------
+
+SLIDE 13: Evaluation – Link‑Prediction Performance
+TEXTUAL ELEMENTS
+• Table summarising:  
+  Mean Reciprocal Rank         0.564  
+  Hits @ 1                     42 %  
+  Hits @ 10                    65 %  
+  Average Rank                 24.1
+
+GRAPHIC / VISUAL ELEMENTS
+• Left: vertical bar chart (vector graphic):
+  – X‑axis categories Top‑1, Top‑3, Top‑10, Top‑100.  
+  – Y‑axis frequency (0 – 1000).  
+  – Bars filled gradient navy→sky‑blue; thin black outline; numeric labels atop each bar.
+• Right: violin plot silhouette overlay comparing rank distribution.
+• Axes labels 12 pt; chart legend bottom‑left.
+
+--------------------------------------------------------------------------------
+
+SLIDE 14: Metric Interpretation
+TEXTUAL ELEMENTS
+• Four concise bullet paragraphs interpreting each metric, indented.
+
+GRAPHIC / VISUAL ELEMENTS
+• Cumulative Hits‑vs‑Rank line chart:
+  – Smooth blue curve, markers every 10 ranks.  
+  – X‑axis 0–100; Y‑axis cumulative percentage.  
+  – Horizontal dashed line at 80 % marks common benchmark.
+
+--------------------------------------------------------------------------------
+
+SLIDE 15: ROC / AUC Analysis
+TEXTUAL ELEMENTS
+• AUC value prominently in 36 pt bold: “AUC = 0.87”.
+
+GRAPHIC / VISUAL ELEMENTS
+• Classic ROC curve plot:
+  – Background light‑grey grid.  
+  – Blue rising curve bows toward top‑left; diagonal random‑chance dashed line in grey.  
+  – Shaded under‑curve area pale‑blue.  
+  – Tick labels 0.0–1.0 on both axes.
+
+--------------------------------------------------------------------------------
+
+SLIDE 16: Advantages of Our Approach
+TEXTUAL ELEMENTS & GRAPHICS (fully integrated)
+• Four quadrant tiles; each tile comprises:
+  1. Top‑center icon inside tinted circle (32 px).  
+  2. Bold heading and two‑line description.
+• Tile colours:  
+  – Structured Foundation (sky‑blue) 📂  
+  – Pattern Discovery (lavender) 🧩  
+  – Inferential Capabilities (mint) 🧠  
+  – Data‑Driven Adaptability (lemon) 🔄
+• Slide gutter space uniform; slight zoom‑in hover captured.
+
+--------------------------------------------------------------------------------
+
+SLIDE 17: Challenges & Limitations
+TEXTUAL ELEMENTS
+• Three banners vertically stacked; each banner dark‑slate with white heading and light‑grey body text.
+
+GRAPHIC / VISUAL ELEMENTS
+• Left edge of each banner features warning icon in orange circle:
+  – Graph Sparsity → broken‑link chain.  
+  – Event Representation Gap → question‑mark calendar.  
+  – Scalability & Model Limits → speedometer half‑full.
+• Slide background very light‑grey (#f7f7f7) to set banners apart.
+
+--------------------------------------------------------------------------------
+
+SLIDE 18: Future Work
+TEXTUAL ELEMENTS
+• Vertical roadmap list with year markers (2025‑Q3 … 2026‑Q2) and milestones.
+
+GRAPHIC / VISUAL ELEMENTS
+• Left side coloured timeline bar (gradient teal→purple) with dot nodes at each milestone; right side contains description text.
+• Icons beside each milestone: schema icon, 3‑D cube rotation, hybrid‑twist arrows, clock with circular arrow (temporal).
+
+--------------------------------------------------------------------------------
+
+SLIDE 19: Conclusion
+TEXTUAL ELEMENTS
+• Three takeaway bullets (bold key phrase + explanation).
+• Final line centered: “Thank you!” 32 pt blue.
+
+GRAPHIC / VISUAL ELEMENTS
+• Subtle background illustration: translucent globe made of latitude‑longitude lines faded to 10 % opacity. Gives sense of global impact without distraction.
+
+--------------------------------------------------------------------------------

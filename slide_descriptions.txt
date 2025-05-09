@@ -1,0 +1,111 @@
+Slide 1 – Title
+“Leveraging Knowledge Graphs and Trans‑E Embeddings for Event Extraction from Email Data”
+• Large, bold two‑line title centered on a clean white background.
+• One‑sentence subtitle beneath the title introduces the aim: transforming unstructured email into actionable insight.
+• Authors’ names (“By Gaurav Surtani & Somesh Bagadiya”) appear at the bottom.
+• Minimalist design with plenty of whitespace; small “made with Gamma” footer link.
+
+Slide 2 – Why Email Data?
+• Opens with a pull‑quote in italics (“Why should it be so hard to find something on email? …”).
+• Four key rationale blocks, each with an icon:
+  – Vast Unstructured Information – Emails carry rich details of events, tasks, interactions.
+  – Hard to Analyse Systematically – Keyword and rule‑based search break down.
+  – Knowledge Graph Solution – KG provides structured representation of entities/relations.
+  – Tracking Event – Notes Gmail’s limited default “Promotions & Social” labels.
+• Layout: quote on top, two‑column icon‑and‑text grid below.
+
+Slide 3 – System Architecture
+• Horizontal pipeline diagram showing five stages:
+   1. Data Ingestion – Google Takeout MBOX input.
+   2. Parsing & Serialization – extract metadata/content, convert to graph representation.
+   3. Graph DB Loading – populate Neo4j with Person / Email nodes + edges.
+   4. Embedding Generation – tuples (‘From’, ‘To’, ‘Event’) → vector embeddings.
+   5. Agent Interaction – LLM/agent layer queries and analyses the KG.
+• Each stage illustrated with a stylised icon and labelled phases; arrows show data flow.
+
+Slide 4 – What Are We Extracting?
+• Four coloured cards (Meetings, Tasks & Deadlines, Projects, Travel & Social Events).
+• Each card lists concrete email artefacts to capture (e.g., “Invitations, scheduling discussions, acceptances/declines…” for Meetings).
+• Visual icons (calendar, checklist, folder network, airplane/chat) reinforce categories.
+
+Slide 5 – Database Schema
+• Table with two columns: “Focus Area” and “Why it’s on the diagram”.
+• Six numbered rows detailing critical graph design decisions (Email hub, Person–Email edges, Thread/Reply loop, Context nodes, Event→Location path, Graph extensibility).
+• Background likely shows a faint ER diagram silhouette.
+
+Slide 6 – Knowledge Graph Components
+• Full‑screen graphic of the email KG: colourful node clusters (Person, Email, Thread, Attachment, Location, Event).
+• Legend or color key identifies node types; directed arrows denote edge types (SENT, RECEIVED, BELONGS_TO, etc.).
+• Visually communicates graph’s richness.
+
+Slide 7 – TransE: Translating Embeddings from Knowledge Graphs
+• Split layout: left explains Core Concept with h + r ≈ t equation in large monospace font.
+• Right explains Learning Process: margin‑based ranking loss; minimise energy for valid triples and maximise for corrupted ones.
+• Minimalist diagram of vector translation arrow.
+
+Slide 8 – How Exactly Does TransE Work for Us?
+• Four‑column process table (Setup, Training, Loss Minimisation, Normalisation).
+• Each column enumerates bullet steps (create KG triples, batch epochs, negative sampling, gradient back‑prop, embedding length clipping, loss logging).
+• Flow arrows under table reinforce chronology.
+
+Slide 9 – Academic Reference
+• Citation of Bordes et al. (2013) NIPS paper with full title.
+• Two clickable links: NIPS proceedings PDF and Gamma source.
+• Purpose: ground methodology in prior research.
+
+Slide 10 – Use‑Cases of Adding TransE to Email KG
+• Four use‑case cards with headline and explanatory sub‑bullet:
+  – Event Identification (e.g., detect interviews).
+  – Link Prediction (fill missing details like interviewer, venue).
+  – Participant Discovery (find unlisted people).
+  – Email Clustering (beyond default Gmail labels).
+• Icons: magnifying glass, chain link, group silhouette, tag stack.
+
+Slide 11 – Examples (Events)
+• Screenshot gallery of extracted event triples visualised in Neo4j browser: nodes coloured for persons, emails, event types.
+• Call‑out labels highlight Meeting vs. Flight Update clusters.
+
+Slide 12 – Examples (Interview Event)
+• Zoom‑in on one interview thread: edges between Candidate, Recruiter, Interviewers, Event node.
+• Tooltip pop‑ups show properties like date, location.
+
+Slide 13 – Evaluation of TransE – Link‑Prediction Performance
+• Bar or violin plot of ranks; y‑axis frequency, x‑axis rank buckets (top‑1, top‑3, top‑10…).
+• Table on side summarises metrics: MRR 0.564, Hits@10 65%, Avg. Rank 24.1.
+
+Slide 14 – Metric Interpretation
+• Narrative bullet points interpreting metrics (high MRR means correct recipient near top, etc.).
+• Line chart of cumulative hits vs. rank cutoff.
+
+Slide 15 – ROC / AUC Analysis
+• ROC curve plot with AUC = 0.87 highlighted.
+• Text emphasises separation of positive and negative links; validates embedding quality.
+
+Slide 16 – Advantages of Our Approach
+• Four‑tile grid:
+  1. Structured Foundation
+  2. Pattern Discovery
+  3. Inferential Capabilities
+  4. Data‑Driven Adaptability
+• Each tile has succinct description beneath headline.
+
+Slide 17 – Challenges & Limitations
+• Three‑column list with icon banners:
+  – Graph Sparsity
+  – Event Representation Gap
+  – Scalability & Model Limits
+• Brief elaboration sentences under each.
+
+Slide 18 – Future Work
+• Roadmap timeline or vertical arrows:
+  – Richer Graph Schema
+  – Advanced KGE models (TransH, RotatE…)
+  – Hybrid Approaches
+  – Temporal Embeddings
+
+Slide 19 – Conclusion
+• Three takeaway bullets:
+  – Structured Approach converts email → KG.
+  – Vector Representations uncover latent patterns.
+  – Methodology surpasses rule‑based extraction for complex events.
+• Ends with thank‑you footer.
