@@ -140,3 +140,13 @@ def parse_mbox_to_json(mbox_file, output_file=None, limit=None):
             json.dump(emails, f, ensure_ascii=False, indent=2)
     
     return emails 
+
+if __name__ == "__main__":
+    import argparse
+    parser = argparse.ArgumentParser(description="Parse MBOX file and extract email data to JSON.")
+    parser.add_argument('--input', required=True, help='Path to the input MBOX file')
+    parser.add_argument('--output', required=True, help='Path to the output JSON file')
+    parser.add_argument('--limit', type=int, default=None, help='Optional: maximum number of emails to process')
+    args = parser.parse_args()
+
+    parse_mbox_to_json(args.input, args.output, args.limit) 

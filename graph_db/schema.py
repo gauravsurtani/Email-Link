@@ -24,7 +24,12 @@ def create_constraints(driver):
         "CREATE CONSTRAINT IF NOT EXISTS FOR (e:Email) REQUIRE e.message_id IS UNIQUE",
         "CREATE CONSTRAINT IF NOT EXISTS FOR (t:Thread) REQUIRE t.thread_id IS UNIQUE",
         "CREATE CONSTRAINT IF NOT EXISTS FOR (d:Domain) REQUIRE d.name IS UNIQUE",
-        "CREATE CONSTRAINT IF NOT EXISTS FOR (l:Label) REQUIRE l.name IS UNIQUE"
+        "CREATE CONSTRAINT IF NOT EXISTS FOR (l:Label) REQUIRE l.name IS UNIQUE",
+        "CREATE CONSTRAINT IF NOT EXISTS FOR (s:SemanticData) REQUIRE s.id IS UNIQUE",
+        "CREATE CONSTRAINT IF NOT EXISTS FOR (o:Organization) REQUIRE o.name IS UNIQUE",
+        "CREATE CONSTRAINT IF NOT EXISTS FOR (l:Location) REQUIRE l.name IS UNIQUE",
+        "CREATE CONSTRAINT IF NOT EXISTS FOR (p:Product) REQUIRE p.name IS UNIQUE",
+        "CREATE CONSTRAINT IF NOT EXISTS FOR (a:Action) REQUIRE a.name IS UNIQUE"
     ]
     
     logger.info("Creating database constraints")
@@ -47,7 +52,12 @@ def create_indexes(driver):
         "CREATE INDEX IF NOT EXISTS FOR (e:Email) ON (e.date)",
         "CREATE INDEX IF NOT EXISTS FOR (e:Email) ON (e.subject)",
         "CREATE INDEX IF NOT EXISTS FOR (p:Person) ON (p.name)",
-        "CREATE INDEX IF NOT EXISTS FOR (d:Domain) ON (d.name)"
+        "CREATE INDEX IF NOT EXISTS FOR (d:Domain) ON (d.name)",
+        "CREATE INDEX IF NOT EXISTS FOR (s:SemanticData) ON (s.type)",
+        "CREATE INDEX IF NOT EXISTS FOR (o:Organization) ON (o.name)",
+        "CREATE INDEX IF NOT EXISTS FOR (l:Location) ON (l.name)",
+        "CREATE INDEX IF NOT EXISTS FOR (a:Amount) ON (a.value)",
+        "CREATE INDEX IF NOT EXISTS FOR (d:Date) ON (d.value)"
     ]
     
     logger.info("Creating database indexes")

@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 neo4j>=4.4.0
 python-dateutil>=2.8.0
 tqdm>=4.45.0
@@ -12,3 +13,13 @@ dateparser>=1.0.0
 # You'll also need to download the spaCy model
 # Run: python -m spacy download en_core_web_sm
 # or for better performance: python -m spacy download en_core_web_md 
+=======
+neo4j==5.13.0
+python-dateutil==2.8.2
+tqdm==4.66.1
+python-dotenv==1.0.0
+openai==1.12.0
+spacy==3.7.2
+matplotlib==3.8.2
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.0/en_core_web_sm-3.7.0-py3-none-any.whl 
+>>>>>>> Stashed changes

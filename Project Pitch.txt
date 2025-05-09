@@ -1,0 +1,75 @@
+﻿Project Title:
+Link Prediction in a Knowledge Graph Built from Personal Email Data
+________________
+
+
+
+
+By:
+Somesh Bagadiya
+Gaurav Surtani
+Introduction
+Emails contain a wealth of structured and unstructured data that can provide valuable insights into communication patterns, topic evolution, and implicit relationships [1]. This project aims to construct a knowledge graph from a personal email dataset, focusing on link prediction between different emails to identify potential relationships and infer missing connections. Unlike traditional email datasets, such as Enron, which contain multiple users and complex simultaneous threads, this project will concentrate on a single-user dataset, allowing for more controlled exploration of intra-email relationships.
+The knowledge graph will be constructed by analyzing email content, extracting key entities and relationships using an agentic system for annotation, and structuring this information in a graph database [2]. The final model will use Graph Neural Networks (GNNs) and link prediction algorithms to infer unseen relationships between emails [3]. Additionally, a Retrieval-Augmented Generation (RAG) model will be built on top of the knowledge graph to enhance email-based queries with contextual responses [1,4].
+Objectives
+1. Extract key entities and relationships from personal email data using Natural Language Processing (NLP) techniques.
+2. Develop an agentic system for annotation that automates the structuring of email relationships.
+3. Construct a knowledge graph representing emails, entities, and their relationships.
+4. Implement link prediction models to infer missing connections in the graph.[a][b]
+5. Build a RAG-based system to enable contextual retrieval and query enhancement using the constructed knowledge graph.
+Project Workflow
+1. Email Data Analysis
+* Preprocessing: Extract metadata (sender, recipient, timestamps) and clean email content.
+* Entity Extraction: Use Named Entity Recognition (NER) to identify entities such as names, organizations, and key topics.
+* Relationship Identification: Apply semantic similarity, coreference resolution, and topic modeling to identify implicit links between emails.
+2. Agentic System for Annotation
+* Develop an agent-based annotation system to automatically tag and categorize emails based on extracted information.
+* Implement rule-based and ML-driven techniques for identifying topic continuity and conversational dependencies.
+* Store structured annotations in GraphML or Neo4j format.
+3. Knowledge Graph Construction
+* Represent emails as nodes, with edges capturing relationships (e.g., reply-to, topic similarity, inferred associations).
+* Use GraphML, NetworkX, or Neo4j for graph storage and visualization.
+* Generate knowledge graph embeddings to capture the underlying semantic and structural relationships within the graph:
+* Node Embeddings: Use Node2Vec, DeepWalk, or GraphSAGE to generate low-dimensional vector representations of emails and entities.
+* Edge Embeddings: Apply TransE, ComplEx, or DistMult models to encode relationships between nodes for improved link prediction.
+* Graph-Based Context Representation: Leverage Graph Neural Networks (GNNs) to learn hierarchical representations that enhance link prediction tasks.
+4. Link Prediction in Knowledge Graph
+* Train Graph Neural Networks (GNNs), Node2Vec, or traditional link prediction models to predict missing relationships.
+* Evaluate performance using AUC-ROC, Precision@K, and Mean Average Precision (MAP).
+* Test how well the model can suggest related emails or topic-based linkages.
+5. RAG Integration for Contextual Querying
+* Integrate a RAG pipeline to retrieve relevant email context based on a user's query.
+* Implement a hybrid search mechanism combining semantic similarity and graph-based retrieval.
+* Enable interactive querying, where users can explore connections between emails dynamically.
+Challenges and Considerations
+* Email Structuring: Emails contain a mix of structured (metadata) and unstructured (body content) data, requiring careful preprocessing.
+* Contextual Relationship Extraction: Some relationships are explicit (e.g., replies), while others require inference using semantic similarity techniques.
+* Data Privacy: Since this involves personal emails, the approach should prioritize data security and ethical considerations.
+* Graph Complexity: Balancing graph density and interpretability to ensure meaningful link prediction results.
+Dataset Consideration
+* Personal Email Dataset: A controlled dataset for focused analysis.
+* Enron Email Dataset (Alternative Consideration): Previously explored but found unsuitable due to multi-user complexity and simultaneous threads.
+Expected Outcomes
+1. A structured knowledge graph representing relationships between emails.
+2. A trained link prediction model that suggests missing connections between emails.
+3. A RAG-based email retrieval system that enhances querying through context-aware results.
+4. Insights into email communication patterns and hidden relationships.
+References and Tools
+* Graph Libraries: NetworkX, Neo4j, PyTorch Geometric (PyG)
+* NLP Techniques: Spacy, NLTK, BERT-based models for semantic understanding
+* Machine Learning Models: Graph Neural Networks (GNNs), Node2Vec, DeepWalk
+* RAG Implementation: FAISS for vector search, LangChain for integration
+Conclusion
+This project will explore how knowledge graphs and machine learning can enhance email relationship understanding through link prediction and retrieval-augmented generation. By leveraging personal email data, the model will provide insights into communication flow, topic evolution, and inferred relationships while addressing challenges unique to email-based knowledge graph construction. The final system aims to improve how emails are searched, retrieved, and analyzed, offering a new approach to structuring personal communication data.
+References 
+[1] P. Lewis, E. Perez, A. Piktus, F. Petroni, V. Karpukhin, et al., "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks," Advances in Neural Information Processing Systems, 2020. Available: https://en.wikipedia.org/wiki/Retrieval-augmented_generation
+[2] J. Larson and S. Truitt, "GraphRAG: Unlocking LLM Discovery on Narrative Private Data," Microsoft Research, 2024. Available: https://www.microsoft.com/en-us/research/blog/graphrag-unlocking-llm-discovery-on-narrative-private-data/
+[3] S. Au, C. J. Dimacali, O. Pedirappagari, N. Park, F. Dernoncourt, et al., "Personalized Graph-Based Retrieval for Large Language Models," arXiv preprint arXiv:2501.02157, 2025. Available: https://arxiv.org/abs/2501.02157
+[4] Z. Wang, Z. Li, Z. Jiang, D. Tu, W. Shi, "Crafting Personalized Agents through Retrieval-Augmented Generation on Editable Memory Graphs," arXiv preprint arXiv:2409.19401, 2024. Available: https://arxiv.org/abs/2409.19401
+[5] H. Hao, J. Han, C. Li, Y.-F. Li, X. Yue, "Retrieval-Augmented Personalization for Multimodal Large Language Models," arXiv preprint arXiv:2410.13360, 2024. Available: https://arxiv.org/abs/2410.13360
+
+
+[a]any idea how and what are we goin to predict?
+[b]We need to predict connections between trails of emails. For Example I recieved an email for card statement, then a 10 day warning and then a notification of paid. This connection should be identifiable in the graph. How we can do that, need to research a bit about it. I was hoping of doing same thing as you did for youtube analysis.
+1 total reaction
+Gaurav Surtani reacted with 👍 at 2025-03-05 22:10 PM
